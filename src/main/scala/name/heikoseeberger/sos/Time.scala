@@ -14,8 +14,13 @@
  * limitations under the License.
  */
 
-package name.heikoseeberger
+package name.heikoseeberger.sos
 
-package object sos {
+case class Time(hours: Int = 0, minutes: Int = 0) extends Ordered[Time] {
 
+  private val asMinutes = hours * 60 + minutes
+
+  def -(that: Time): Int = this.asMinutes - that.asMinutes
+
+  def compare(that: Time): Int = this - that
 }
