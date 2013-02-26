@@ -1,7 +1,7 @@
 sos
-==========
+===
 
-Welcome to sos.
+Welcome to sos - State of Scala. Here you find the examples for the "State of Scala" article in the German JavaMagazin 2013.
 
 Contribution policy
 -------------------
