@@ -16,11 +16,30 @@
 
 package name.heikoseeberger.sos
 
-case class Time(hours: Int = 0, minutes: Int = 0) extends Ordered[Time] {
+case class Time(val hours: Int = 0, val minutes: Int = 0, val seconds: Int = 0) extends Ordered[Time] {
+  if (Math.abs(12 - hours) > 12) {
+    throw new IllegalArgumentException("Hours must be in the range [0..23]")
+  }
 
-  private val asMinutes = hours * 60 + minutes
+  if (Math.abs(30 - minutes) > 30) {
+    throw new IllegalArgumentException("Minutes must be in the range [0..59]")
+  }
 
-  def -(that: Time): Int = this.asMinutes - that.asMinutes
+  if (Math.abs(30 - seconds) > 30) {
+    throw new IllegalArgumentException("Seconds must be in the range [0..59]")
+  }
+
+  private val asSeconds = (hours * 60 + minutes) * 60 + seconds;
+
+  def -(that: Time): Int = this.asSeconds - that.asSeconds
 
   def compare(that: Time): Int = this - that
+
+  override def hashCode = this.asSeconds
+
+  override def equals(that: Any) =
+    that match {
+      case time: Time => hashCode == time.hashCode
+      case _ => false
+    }
 }

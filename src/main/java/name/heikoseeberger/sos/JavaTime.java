@@ -17,66 +17,64 @@
 package name.heikoseeberger.sos;
 
 public class JavaTime implements Comparable<JavaTime> {
+  private final int hours;
+  private final int minutes;
+  private final int seconds;
+  private final int asSeconds;
 
-    private final int hours;
+  public JavaTime(final int hours, final int minutes, final int seconds) {
+    this.hours = hours;
+    this.minutes = minutes;
+    this.seconds = seconds;
+    this.asSeconds = ((hours * 60) + minutes) * 60 + seconds;
+  }
 
-    private final int minutes;
+  public JavaTime(final int hours, final int minutes) {
+    this(hours, minutes, 0);
+  }
 
-    private final int asMinutes;
+  public JavaTime(final int hours) {
+    this(hours, 0, 0);
+  }
 
-    public JavaTime(int hours, int minutes) {
-        this.hours = hours;
-        this.minutes = minutes;
-        this.asMinutes = hours * 60 + minutes;
+  public JavaTime() {
+    this(0, 0, 0);
+  }
+
+  public int getHours() {
+    return hours;
+  }
+
+  public int getMinutes() {
+    return minutes;
+  }
+
+  public int getSeconds() {
+    return seconds;
+  }
+
+  public int minus(final JavaTime that) {
+    return this.asSeconds - that.asSeconds;
+  }
+
+  @Override
+  public boolean equals(final Object obj) {
+    if (!(obj instanceof JavaTime)) {
+      return false;
     }
 
-    public JavaTime(int hours) {
-        this(hours, 0);
-    }
+    JavaTime other = (JavaTime) obj;
 
-    public JavaTime() {
-        this(0, 0);
-    }
+    return this.asSeconds == other.asSeconds;
+  }
 
-    public int getHours() {
-        return hours;
-    }
+  @Override
+  public int hashCode() {
+    return asSeconds;
+  }
 
-    public int getMinutes() {
-        return minutes;
-    }
-
-    public int minus(JavaTime that) {
-        return this.asMinutes - that.asMinutes;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        JavaTime other = (JavaTime) obj;
-        if (hours != other.hours)
-            return false;
-        if (minutes != other.minutes)
-            return false;
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + hours;
-        result = prime * result + minutes;
-        return result;
-    }
-
-    @Override
-    public int compareTo(JavaTime that) {
-        return this.minus(that);
-    }
+  @Override
+  public int compareTo(final JavaTime that) {
+    return this.minus(that);
+  }
 }
