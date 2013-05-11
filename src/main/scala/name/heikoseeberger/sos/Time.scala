@@ -16,18 +16,12 @@
 
 package name.heikoseeberger.sos
 
+import scala.annotation.Annotation
+
 case class Time(val hours: Int = 0, val minutes: Int = 0, val seconds: Int = 0) extends Ordered[Time] {
-  if (Math.abs(12 - hours) > 12) {
-    throw new IllegalArgumentException("Hours must be in the range [0..23]")
-  }
-
-  if (Math.abs(30 - minutes) > 30) {
-    throw new IllegalArgumentException("Minutes must be in the range [0..59]")
-  }
-
-  if (Math.abs(30 - seconds) > 30) {
-    throw new IllegalArgumentException("Seconds must be in the range [0..59]")
-  }
+  require(0 <= hours && hours <= 23)
+  require(0 <= minutes && minutes <= 59)
+  require(0 <= seconds && seconds <= 59)
 
   private val asSeconds = (hours * 60 + minutes) * 60 + seconds;
 
@@ -42,4 +36,6 @@ case class Time(val hours: Int = 0, val minutes: Int = 0, val seconds: Int = 0) 
       case time: Time => hashCode == time.hashCode
       case _ => false
     }
+
+  override def toString = "%02d:%02d:%02d".format(hours, minutes, seconds)
 }

@@ -16,9 +16,9 @@
 
 package name.heikoseeberger.sos
 
-import org.scalatest.{ MustMatchers, WordSpec }
+import org.scalatest.{ MustMatchers, ShouldMatchers, WordSpec }
 
-class TimeSpec extends WordSpec with MustMatchers {
+class TimeSpec extends WordSpec with MustMatchers with ShouldMatchers {
 
   "A List of Time" when {
     val times = List(Time(1), Time(15, 30), Time(20, 15))
@@ -31,6 +31,34 @@ class TimeSpec extends WordSpec with MustMatchers {
     "mapped by extracting the hours" should {
       "be transformed into a List [Int] with the respective hour values" in {
         times map (_.hours) must be === List(1, 15, 20)
+      }
+    }
+    "given invalid arguments" should {
+      "throw IllegalArgumentException" in {
+        intercept[IllegalArgumentException] {
+          val time = Time(-1, 0, 0)
+        }
+        intercept[IllegalArgumentException] {
+          val time = Time(24, 0, 0)
+        }
+        intercept[IllegalArgumentException] {
+          val time = Time(0, 60, 0)
+        }
+        intercept[IllegalArgumentException] {
+          val time = Time(0, 0, 70)
+        }
+      }
+    }
+    "time formats" should {
+      "display correctly" in {
+        val time1 = Time(9)
+        assert("09:00:00".equals(time1.toString))
+
+        val time2 = Time(9, 30)
+        assert("09:30:00".equals(time2.toString))
+
+        val time3 = Time(9, 30, 45)
+        assert("09:30:45".equals(time3.toString))
       }
     }
   }
